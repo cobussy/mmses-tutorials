@@ -1,6 +1,6 @@
 #tutorial 7
 
-#install.packages("icesDatras") 
+#install all packages necessary for exercises 
 install.packages("icesDatras")
 install.packages("sf")
 install.packages("rnaturalearth")
@@ -15,32 +15,31 @@ library(rnaturalearthdata)
 surveys <- getSurveyList()
 print(surveys)
 
+#exercise 2.1 
+
 # List available years for a survey
-years <- getSurveyYearList("EVHOE")
+years <- getSurveyYearList("NS-IBTS")
 print(years)
 
-#Another function called getSurveyYearQuarterList(),
-#takes a survey name and a year, and returns the quarter(s) 
-#of the year that data are available. 
-#Packing it in an sapply() function 
-sapply(years, function(x) {getSurveyYearQuarterList("EVHOE",x)})
+# Packing it in an sapply() function 
+sapply(years, function(x) {getSurveyYearQuarterList("NS-IBTS",x)})
 
 # Fetch haul and species data
-hh <- getHHdata(survey = "EVHOE", year = 2020, quarter = 4)
-hl <- getHLdata(survey = "EVHOE", year = 2020, quarter = 4)
+hh <- getHHdata(survey = "NS-IBTS", year = 2025, quarter = 1)
+hl <- getHLdata(survey = "NS-IBTS", year = 2025, quarter = 1)
 
-#First 2 records for each of these data sets.
+# First 2 records for each of these data sets.
 head(hh,2)
 head(hl,2)
 
-#Making unsinque identifiers for merging data sets
+# Making unsinque identifiers for merging data sets
 hh$uniqueID <- paste(hh$Country, hh$HaulNo)
 hl$uniqueID <- paste(hl$Country, hl$HaulNo)
 
-# Keep only data for  valid_Aphia 127419 (Capros aper, "boarfish"), and keep only limited set of columns (unique haul ID and total number caught) 
-spec_hl <- subset(hl, Valid_Aphia == 127419, select = c(uniqueID, TotalNo))
+# Keep only data for  valid_Aphia 105814 (Scyliorhinus canicula, "dogfish"), and keep only limited set of columns (unique haul ID and total number caught) 
+spec_hl <- subset(hl, Valid_Aphia == 105814, select = c(uniqueID, TotalNo))
 
-# Remove any duplicated unique IDs. The TotalNo column is then the total number of boarfish caught per haul.
+# Remove any duplicated unique IDs. The TotalNo column is then the total number of dogfish caught per haul.
 # Also keep only 
 spec_hl_uniqueID <- spec_hl[!duplicated(spec_hl$uniqueID),]
 
@@ -65,8 +64,7 @@ ggplot() +
   geom_sf(data = world, fill = "grey90", color = "grey60") +
   geom_sf(data = final_spec_sf,  aes(size = TotalNo)) +
   #scale_size(range = c(2, 10)) +
-  coord_sf(xlim = c(-12, 2), ylim = c(42, 53)) +
+  coord_sf(xlim = c(-4, 9), ylim = c(51, 62)) +
   theme_minimal() +
   labs(size = "Total catch for species per haul")
 
-#exercise 2.1 
