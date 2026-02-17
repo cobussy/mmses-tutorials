@@ -4,10 +4,12 @@
 install.packages("icesDatras")
 install.packages("sf")
 install.packages("rnaturalearth")
+install.packages("rnaturalearthdata")
 library(icesDatras)     # Needed to extract RV survey data
 library(sf)             # For GIS analyses
 library(ggplot2)        # For plotting
 library(rnaturalearth)  # For getting countries/coastline data
+library(rnaturalearthdata)
 
 # List all available surveys
 surveys <- getSurveyList()
@@ -66,3 +68,5 @@ ggplot() +
   coord_sf(xlim = c(-12, 2), ylim = c(42, 53)) +
   theme_minimal() +
   labs(size = "Total catch for species per haul")
+
+#exercise 2.1 
